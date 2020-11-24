@@ -86,12 +86,62 @@ def flagDocx(filename):
         print(e)
         return None
 
+
+#analysis the text,if there are wrong words, return the Correct text.Otherwise return None
+def textAnalysis(text):
+    errs = 0
+    try:
+        corrected_sent, detail = pycorrector.correct(text)
+        if len(detail) != 0:
+            # three are error words, flag them in the docx
+            for elem in detail:
+                errs += 1
+                print("---------------------------------------------------------------")
+                print("{}\n这段文本存在错别字".format(text))
+                print("发现错别字:{},正确词为:{}".format(elem[0], elem[1]))
+                print("错别字位置在本段的第{}到第{}字之间".format(elem[2], elem[3]))
+                print("---------------------------------------------------------------")
+            return (corrected_sent,errs)
+        else:
+            return (corrected_sent,0)
+    except:
+        return (None,0)
 """
     parse the txt file and read one line each time.Analysis each line 
     whether existed wrong words
 """
 def parsTxtFile(filename):
-    pass
+    lineNo = 0
+    # count the line number which has wrong words
+    errCount = 0
+    try:
+        with open(filename, "r", errors='ignore') as f1:  # add encoding='UTF-8' or change 'r' to 'rb' or errors='ignore'
+            print('开始读原始文件,进行错别字分析......')
+            lines = f1.readlines()
+            with open('d:\\错别字分析.doc', 'w') as f2:
+                for line in lines:
+                    lineNo += 1
+                    textCorrected,errs = textAnalysis(line)
+                    if textCorrected != None:
+                        errCount += errs
+                        # write the correct text into the file
+                        f2.write("行号：{}有错别字，正确的句子是：".format(lineNo))
+                        f2.write(textCorrected)
+                    else:
+                        print("line {}:{} OK".format(lineNo, line))
+                f2.write("---------------------------------------------------\n")
+                f2.write("总共完成{}行文本分析\n".format(lineNo))
+                f2.write("总共有{}c处错别字\n".format(errCount))
+                f2.write("---------------------------------------------------\n")
+            print('*********************************************************')
+            print('已经完成文本错别字分析，输出结果存储在D:\\错别字分析.doc文件中')
+            print("总共完成{}行文本分析\n".format(lineNo))
+            print("总共有{}处错别字\n".format(errCount))
+            print('*********************************************************')
+    except IOError as e:
+        print(e)
+
+
 
 def main():
     printCopyRight()
@@ -105,7 +155,9 @@ def main():
             printMenu()
         elif choice == '2':
             # to be developed
-            print("此功能开发中......")
+            # print("此功能开发中......")
+            filename = input("请输入待分析的txt的文件名: ")
+            parsTxtFile(filename)
             printMenu()
 
 main()
