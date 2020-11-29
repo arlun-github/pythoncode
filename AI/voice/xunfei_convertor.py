@@ -8,8 +8,8 @@ import hmac
 import json
 import os
 import time
-
 import requests
+from aivoice import record_audio,play_audio
 
 lfasr_host = 'http://raasr.xfyun.cn/api'
 
@@ -193,7 +193,7 @@ class RequestApi(object):
             # 每次获取进度间隔20S
             time.sleep(20)
         # 5 . 获取结果
-        self.get_result_request(taskid=taskid)
+        return  self.get_result_request(taskid=taskid)
 
 
 # 注意：如果出现requests模块报错："NoneType" object has no attribute 'read', 请尝试将requests模块更新到2.20.0或以上版本(本demo测试版本为2.20.0)
@@ -203,5 +203,14 @@ if __name__ == '__main__':
     APP_ID = "5fc34828"
     SECRET_KEY = "a07154964ff5d36444d35bc0d889e4b7"
     file_path = r"output.wav"
+    record_audio(file_path,50)
+    print("即将播放刚才的录音......")
+    play_audio(file_path)
     api = RequestApi(appid=APP_ID, secret_key=SECRET_KEY, upload_file_path=file_path)
-    api.all_api_request()
+    result = api.all_api_request()
+    texts = result.get('data')
+    textsDic = json.loads(texts)
+    totalText = []
+    for elem in textsDic:
+        totalText.append(elem.get('onebest'))
+    print("录音的语音翻译为：{}".format(totalText))

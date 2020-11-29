@@ -136,8 +136,7 @@ def main():
         print('出现意外情况，请检查对百度语音平台的调用情况......')
         print("错误吗为：".format(errNo))
         print("错误信息：{}".format(result.get('err_msg')))
-         
 
-main()
+#main()
         
     
