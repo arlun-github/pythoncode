@@ -35,7 +35,7 @@ def record_audio(wave_out_path,record_second):
     frames = []
     #for i in tqdm(range(0, int(RATE / CHUNK * record_second))):
     for i in tqdm(range(0, int(RATE / CHUNK * record_second)),\
-            desc='进度', ncols=100, ascii=' =', bar_format='{l_bar}{bar}|'):
+            desc='录音进度', ncols=100, ascii=' =', bar_format='{l_bar}{bar}|'):
         data = stream.read(CHUNK)
         wf.writeframes(data)
     print("录音结束，请停止说话。")
