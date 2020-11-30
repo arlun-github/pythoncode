@@ -58,7 +58,9 @@ def flagDocx(filename):
                         for elem in detail:
                             errCount += 1
                             print("\n---------------------------------------------------------------")
-                            print("{}\n这段文本存在错别字".format(run.text))
+                            #print("{}\n这段文本存在错别字".format(run.text))
+                            print("{}***{}***{}\n这段文本存在错别字".format(run.text[:elem[2]], \
+                                                            run.text[elem[2]:elem[3]], run.text[elem[3]:]))
                             print("发现错别字:{},正确词为:{}".format(elem[0],elem[1]))
                             print("错别字位置在本段的第{}到第{}字之间".format(elem[2],elem[3]))
                             print("---------------------------------------------------------------\n")
